@@ -24,29 +24,47 @@
 	</appender>
 
 	<!--输出到数据库的appender使用阿里的druid连接池 -->
-	<appender name="db-classic-mysql" class="ch.qos.logback.classic.db.DBAppender">
+	<appender name="DB-DRUID" class="ch.qos.logback.classic.db.DBAppender">
 		<connectionSource
 			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-			<!--使用阿里的druid  -->
+			<!--使用阿里的druid -->
 			<dataSource class="com.alibaba.druid.pool.DruidDataSource">
+			<!--  使用连接池出现方言问题,应该加入下方的方言配置-->
+				<driverClass>com.mysql.jdbc.Driver</driverClass>
+				<jdbcUrl>
+					jdbc:mysql://localhost:3307/logback_demo
+				</jdbcUrl>
+				<username>root</username>
+				<password>root</password>
+				<!--  方言配置语句-->
+				<sqlDialect class="ch.qos.logback.core.db.dialect.MySQLDialect" />
+			</dataSource>
+		</connectionSource>
+	</appender>
+
+	<!-- 将日志写入数据库 使用dbcp形式 -->
+	<appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">
+		<connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
+			<dataSource class="org.apache.commons.dbcp.BasicDataSource">
 				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
-				<url>jdbc:mysql://localhost:3307/logback_demo</url>
+				<url>jdbc:mysql://localhost:3307/logback_demo?characterEncoding=UTF-8
+				</url>
 				<username>root</username>
 				<password>root</password>
 			</dataSource>
 		</connectionSource>
 	</appender>
 
-
 	<!-- 根目录的输出级别 -->
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DB-DRUID" />
 	</root>
 
 	<!-- 单独类的输出设定 -->
-	<logger name="com.example.demo">
-		<appender-ref ref="db-classic-mysql" />
-	</logger>
+<!-- 	<logger name="com.example.demo">
+		<appender-ref ref="DB-DRUID" />
+	</logger> -->
 
 
 
