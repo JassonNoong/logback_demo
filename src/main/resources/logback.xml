@@ -40,6 +40,7 @@
 	</appender>
 
 	<appender name="DB-DRUID" class="ch.qos.logback.classic.db.DBAppender">
+	<!--如果是druid或dbcp,必须使用drivermanagager  -->
 		<connectionSource
 			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
 			<!--druid连接池  -->
@@ -47,6 +48,7 @@
 				<!-- 使用dbcp连接池 -->
 				<!-- <dataSource class="org.apache.commons.dbcp.BasicDataSource"> -->
 				<driverClass>com.mysql.jdbc.Driver</driverClass>
+				<!-- 此为mariadb下的测试 -->
 				<url>jdbc:mysql://localhost:3307/logback_demo</url>
 				<user>root</user>
 				<password>root</password>
