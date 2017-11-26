@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-<appender name="STDOUT"
-class="ch.qos.logback.core.ConsoleAppender">
-<!--
-encoders are assigned the type
-ch.qos.logback.classic.encoder.PatternLayoutEncoder by
-default
--->
-<encoder>
-<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}
-- %msg%n</pattern>
-</encoder>
-</appender>
-<!-- 记录到文件的appender -->
-<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-<file>myApp.log</file>
-<!--
-encoders are assigned by default the type
-ch.qos.logback.classic.encoder.PatternLayoutEncoder
--->
-<encoder>
-<pattern>%date %level [%thread] %logger{10}[%file:%line] %msg%n
-</pattern>
-</encoder>
-</appender>
 
-<root level="debug">
-<appender-ref ref="STDOUT" />
-</root>
-<logger name="com.example.demo">
-	<appender-ref  ref="FILE"/>
-</logger>
+	<!--输出到控制台的appender -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}
+				- %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<!-- 记录到文件的appender -->
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>myApp.log</file>
+		<!-- encoders are assigned by default the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%date %level [%thread] %logger{10}[%file:%line] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!--输出到数据库的appender使用阿里的druid连接池 -->
+	<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+		<connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
+			<dataSource class="com.alibaba.druid.pool.DruidDataSource">
+				<driverClass>com.mysql.jdbc.Driver</driverClass>
+				<jdbcUrl>jdbc:mysql://localhost:3307/logbcak_demo</jdbcUrl>
+				<user>root</user>
+				<password>root</password>
+			</dataSource>
+		</connectionSource>
+	</appender>
+
+
+	<!-- 根目录的输出级别 -->
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<!-- 单独类的输出设定 -->
+	<logger name="com.example.demo">
+		<appender-ref ref="DB" />
+	</logger>
+
+
 
 </configuration>
